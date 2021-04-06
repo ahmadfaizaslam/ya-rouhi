@@ -84,11 +84,12 @@ class Account:
 
     def validate_transaction(acc, amount_to_add):
         with acc as a:
-            print('Adding {} to account'.format(amount_to_add))
+            print("Adding {} to account".format(amount_to_add))
             a.add_transaction(amount_to_add)
-            print('New balance would be: {}'.format(a.balance))
+            print("New balance would be: {}".format(a.balance))
             if a.balance < 0:
-                raise ValueError('sorry cannot go in debt!')
+                raise ValueError("sorry cannot go in debt!")
+
 
 acc = Account("bob", 10)
 
