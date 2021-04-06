@@ -66,6 +66,29 @@ class Account:
             print(transaction)
         print("\nBalance: {}".format(self.balance))
 
+    """Context Manager Support and the With Statement"""
+
+    def __enter__(self):
+        print("ENTER WITH: Making backup of transactions for rollback")
+        self._copy_transactions = list(self._transactions)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print("EXIT WITH:", end=" ")
+        if exc_type:
+            self._transactions = self._copy_transactions
+            print("Rolling back to previous transactions")
+            print("Transaction resulted in {} ({})".format(exc_type.__name__, exc_val))
+        else:
+            print("Transaction OK")
+
+    def validate_transaction(acc, amount_to_add):
+        with acc as a:
+            print('Adding {} to account'.format(amount_to_add))
+            a.add_transaction(amount_to_add)
+            print('New balance would be: {}'.format(a.balance))
+            if a.balance < 0:
+                raise ValueError('sorry cannot go in debt!')
 
 acc = Account("bob", 10)
 
@@ -97,3 +120,6 @@ print("Is acc2 > acc", acc2 > acc)
 
 acc3 = acc2 + acc
 print(acc3)
+
+
+print(acc)
